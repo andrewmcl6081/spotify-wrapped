@@ -1,13 +1,16 @@
 from flask import Flask, redirect, request
 from dotenv import load_dotenv
-from utils import gen_random_string
+from utils import gen_random_string, get_auth_header
 import os
+import requests
+
+load_dotenv()
 
 app = Flask(__name__)
-load_dotenv()
 
 client_id = os.getenv("CLIENT_ID")
 client_secret = os.getenv("CLIENT_SECRET")
+redirect_uri = "http://localhost:8080/account"
 
 @app.route("/")
 def hello_world():
@@ -17,7 +20,6 @@ def hello_world():
 def authorize_spotify():
     response_type = "code"
     scope = "user-top-read"
-    redirect_uri = "http%3A%2F%2Flocalhost%3A8080%2Faccount"
     state = gen_random_string(16)
     
     # parentheses allow multiple string concatenation
@@ -42,6 +44,32 @@ def account_page():
     
     print(f"spotify response code is {code}")
     print(f"spotify state is {state}")
+    
+    url = "https://accounts.spotify.com/api/token"
+    
+    data = {
+        "grant_type": "authorization_code",
+        "code": code,
+        "redirect_uri": redirect_uri
+    }
+    
+    base64_auth = get_auth_header(client_id, client_secret)
+    
+    headers = {
+        "Authorization": "Basic " + base64_auth,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    
+    response = requests.post(url=url, data=data, headers=headers)
+    
+    if response.status_code != 200:
+        print(response.json())
+        return
+    
+
+    json_result = response.json()
+    print(json_result)
+    
     return "<p>Account Page</p>"
     
     
