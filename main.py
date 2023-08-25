@@ -1,74 +1,55 @@
 from flask import Flask, redirect, request
 from dotenv import load_dotenv
-from utils import gen_random_string, get_auth_header
+from utils import gen_random_string, get_token, get_auth_header
 import os
-import requests
+from requests import get
 
 load_dotenv()
 
 app = Flask(__name__)
 
-client_id = os.getenv("CLIENT_ID")
-client_secret = os.getenv("CLIENT_SECRET")
-redirect_uri = "http://localhost:8080/account"
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = "http://localhost:8080/analytics"
+SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-read"
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Home Page</p>"
 
 @app.route("/login", methods=["GET"])
 def authorize_spotify():
     response_type = "code"
-    scope = "user-top-read"
     state = gen_random_string(16)
     
     # parentheses allow multiple string concatenation
     spotify_authorize_url = (
         f"https://accounts.spotify.com/authorize?"
         f"response_type={response_type}&"
-        f"client_id={client_id}&"
-        f"scope={scope}&"
-        f"redirect_uri={redirect_uri}&"
+        f"client_id={CLIENT_ID}&"
+        f"scope={SCOPE}&"
+        f"redirect_uri={REDIRECT_URI}&"
         f"state={state}"
     )
     
     return redirect(spotify_authorize_url, code=302)
 
-@app.route("/account", methods=["GET"])
+@app.route("/analytics", methods=["GET"])
 def account_page():
     # TODO: compare the state parameter in the redirection uri
     # with the state parameter originally provided in the auth uri
     
     code = request.args.get("code")
-    state = request.args.get("state")
+    # state = request.args.get("state")
     
-    print(f"spotify response code is {code}")
-    print(f"spotify state is {state}")
+    token = get_token(CLIENT_ID, CLIENT_SECRET, code, REDIRECT_URI)
     
-    url = "https://accounts.spotify.com/api/token"
+    test_url = "https://api.spotify.com/v1/me/top/artists"
+    header = get_auth_header(token)
     
-    data = {
-        "grant_type": "authorization_code",
-        "code": code,
-        "redirect_uri": redirect_uri
-    }
-    
-    base64_auth = get_auth_header(client_id, client_secret)
-    
-    headers = {
-        "Authorization": "Basic " + base64_auth,
-        "Content-Type": "application/x-www-form-urlencoded"
-    }
-    
-    response = requests.post(url=url, data=data, headers=headers)
-    
-    if response.status_code != 200:
-        print(response.json())
-        return
-    
-
-    json_result = response.json()
-    print(json_result)
+    response = get(test_url, headers=header)
+    body = response.json()
+    print(body)
     
     return "<p>Account Page</p>"
     
