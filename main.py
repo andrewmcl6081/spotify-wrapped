@@ -5,13 +5,15 @@ import os
 from requests import get
 
 load_dotenv()
-
 app = Flask(__name__)
 
+
+#Globals
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = "http://localhost:8080/analytics"
 SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-read"
+
 
 @app.route("/")
 def hello_world():
