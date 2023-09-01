@@ -1,8 +1,9 @@
+from utils import gen_random_string, get_token
 from flask import Flask, redirect, request
+from queries import get_user_top_tracks
 from dotenv import load_dotenv
-from utils import gen_random_string, get_token, get_auth_header
-import os
 from requests import get
+import os
 
 load_dotenv()
 app = Flask(__name__)
@@ -18,6 +19,7 @@ SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-r
 @app.route("/")
 def hello_world():
     return "<p>Home Page</p>"
+
 
 @app.route("/login", methods=["GET"])
 def authorize_spotify():
@@ -36,6 +38,7 @@ def authorize_spotify():
     
     return redirect(spotify_authorize_url, code=302)
 
+
 @app.route("/analytics", methods=["GET"])
 def account_page():
     # TODO: compare the state parameter in the redirection uri
@@ -45,17 +48,10 @@ def account_page():
     # state = request.args.get("state")
     
     token = get_token(CLIENT_ID, CLIENT_SECRET, code, REDIRECT_URI)
+    response = get_user_top_tracks(token, "tracks", "short_term")
     
-    test_url = "https://api.spotify.com/v1/me/top/artists"
-    header = get_auth_header(token)
-    
-    response = get(test_url, headers=header)
-    body = response.json()
-    print(body)
-    
-    return "<p>Account Page</p>"
+    return response
     
     
-
 if __name__ == '__main__':
-    app.run(host='localhost', port=8080)
+    app.run(host='localhost', debug=True, port=8080)
