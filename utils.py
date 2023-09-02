@@ -1,7 +1,16 @@
 import random
 import string
 import base64
+import os
 from requests import post
+from dotenv import load_dotenv
+
+load_dotenv()
+
+#Globals
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = "http://localhost:8080/analytics"
 
 # Random string between 43 to 128 characters
 def gen_random_string(length):
@@ -13,8 +22,8 @@ def gen_random_string(length):
     
     return text
 
-def get_token(client_id, client_secret, code, redirect_uri):
-    auth_string = client_id + ":" + client_secret
+def get_tokens(code):
+    auth_string = CLIENT_ID + ":" + CLIENT_SECRET
     auth_bytes = auth_string.encode("ascii")
     base64_bytes = base64.b64encode(auth_bytes)
     base64_auth = base64_bytes.decode("ascii")
@@ -24,7 +33,7 @@ def get_token(client_id, client_secret, code, redirect_uri):
     data = {
         "grant_type": "authorization_code",
         "code": code,
-        "redirect_uri": redirect_uri
+        "redirect_uri": REDIRECT_URI
     }
     
     headers = {
@@ -39,7 +48,9 @@ def get_token(client_id, client_secret, code, redirect_uri):
         return
     
     json_result = response.json()
-    return json_result["access_token"]
+    tokens = (json_result["access_token"], json_result["refresh_token"])
+    
+    return tokens
 
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
