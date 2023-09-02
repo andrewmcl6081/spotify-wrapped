@@ -1,4 +1,4 @@
-from utils import gen_random_string, get_token
+from utils import gen_random_string, get_tokens
 from flask import Flask, redirect, request
 from queries import get_user_top_tracks
 from dotenv import load_dotenv
@@ -25,6 +25,7 @@ def hello_world():
 def authorize_spotify():
     response_type = "code"
     state = gen_random_string(16)
+    print("State from auth url", state)
     
     # parentheses allow multiple string concatenation
     spotify_authorize_url = (
@@ -45,10 +46,11 @@ def account_page():
     # with the state parameter originally provided in the auth uri
     
     code = request.args.get("code")
-    # state = request.args.get("state")
+    state = request.args.get("state")
+    print("State from callback uri", state)
     
-    token = get_token(CLIENT_ID, CLIENT_SECRET, code, REDIRECT_URI)
-    response = get_user_top_tracks(token, "tracks", "short_term")
+    access_token, refresh_token = get_tokens(code)
+    response = get_user_top_tracks(access_token, "short_term")
     
     return response
     
