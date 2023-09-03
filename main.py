@@ -1,8 +1,8 @@
 from flask import Flask, redirect, request, session, url_for
 from utils import gen_random_string, get_tokens
-from queries import get_user_top_tracks
 from dotenv import load_dotenv
 from requests import get
+import queries
 import os
 
 load_dotenv()
@@ -56,9 +56,35 @@ def account_page():
     
     
     session["token_info"] = get_tokens(code)
-    print(get_user_top_tracks(session["token_info"][0], "short_term"))
+    print("token from /analytics:", session["token_info"][0])
     
-    return "<p>You are now authorized to make API calls</p>"
+    return "<p>Analytics route done</p>"
+
+
+@app.route("/top-tracks", methods=["GET"])
+def get_top_tracks():
+    token_info = session["token_info"]
+    
+    if not token_info:
+        return "<p>Not Authorized</p>"
+    
+    token = token_info[0]
+    top_tracks = queries.get_user_top_tracks(token, "short_term")
+    
+    return top_tracks
+
+
+@app.route("/top-artists", methods=["GET"])
+def get_top_artists():
+    token_info = session["token_info"]
+    
+    if not token_info:
+        return "<p>Not Authorized</p>"
+    
+    token = token_info[0]
+    top_artists = queries.get_user_top_artists(token, "short_term")
+    
+    return top_artists
     
     
 if __name__ == '__main__':
