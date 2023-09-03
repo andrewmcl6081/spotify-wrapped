@@ -72,6 +72,21 @@ def filter_tracks(tracks):
         filtered_track_list.append(track_data)
     
     return filtered_track_list
+
+def filter_artists(artists):
+    filtered_artist_list = []
+    
+    for artist in artists:
+        
+        artist_data = {
+            "artist_name": artist["name"],
+            "artist_images": artist["images"],
+            "artist_id": artist["id"]
+        }
+        
+        filtered_artist_list.append(artist_data)
+    
+    return filtered_artist_list
     
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
