@@ -1,13 +1,14 @@
+from flask import Flask, redirect, request, session, url_for
 from utils import gen_random_string, get_tokens
-from flask import Flask, redirect, request
 from queries import get_user_top_tracks
 from dotenv import load_dotenv
 from requests import get
 import os
 
 load_dotenv()
-app = Flask(__name__)
 
+app = Flask(__name__)
+app.secret_key = "spotify_wrapped"
 
 #Globals
 CLIENT_ID = os.getenv("CLIENT_ID")
@@ -17,7 +18,7 @@ SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-r
 
 
 @app.route("/")
-def hello_world():
+def home():
     return "<p>Home Page</p>"
 
 
@@ -25,6 +26,8 @@ def hello_world():
 def authorize_spotify():
     response_type = "code"
     state = gen_random_string(16)
+    session["state"] = state
+    
     print("State from auth url", state)
     
     # parentheses allow multiple string concatenation
@@ -42,17 +45,20 @@ def authorize_spotify():
 
 @app.route("/analytics", methods=["GET"])
 def account_page():
-    # TODO: compare the state parameter in the redirection uri
-    # with the state parameter originally provided in the auth uri
-    
+        
     code = request.args.get("code")
     state = request.args.get("state")
-    print("State from callback uri", state)
+    stored_state = session["state"]
     
-    access_token, refresh_token = get_tokens(code)
-    response = get_user_top_tracks(access_token, "short_term")
+    # Dont allow user access without authorization
+    if state is None or state != stored_state:
+        return redirect(url_for("home"))
     
-    return response
+    
+    session["token_info"] = get_tokens(code)
+    print(get_user_top_tracks(session["token_info"][0], "short_term"))
+    
+    return "<p>You are now authorized to make API calls</p>"
     
     
 if __name__ == '__main__':
