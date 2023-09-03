@@ -12,6 +12,7 @@ CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = "http://localhost:8080/analytics"
 
+
 # Random string between 43 to 128 characters
 def gen_random_string(length):
     text = ""
@@ -48,9 +49,29 @@ def get_tokens(code):
         return
     
     json_result = response.json()
-    tokens = (json_result["access_token"], json_result["refresh_token"])
     
-    return tokens
+    return (json_result["access_token"], json_result["refresh_token"])
 
+def filter_tracks(tracks):
+    filtered_track_list = []
+    
+    for track in tracks:
+        
+        track_data = {
+            "album_name" : track["album"]["name"],
+            "album_images" : track["album"]["images"],
+            "track_name" : track["name"],
+            "track_id" : track["id"]
+        }
+        
+        track_data["track_artists"] = []
+        
+        for artist in track["artists"]:
+            track_data["track_artists"].append(artist["name"])
+        
+        filtered_track_list.append(track_data)
+    
+    return filtered_track_list
+    
 def get_auth_header(token):
     return {"Authorization": "Bearer " + token}
