@@ -5,8 +5,9 @@ import About from './pages/About'
 import TopArtists from './pages/TopArtists'
 import TopTracks from './pages/TopTracks'
 import NoPage from './pages/NoPage'
+import Analytics from './pages/Analytics'
 
-export default function App() {
+function App() {
     return (
         <div>
             <BrowserRouter>
@@ -17,9 +18,12 @@ export default function App() {
                     <Route path='/TopTracks' element={<TopTracks />} />
                     <Route path='/TopArtists' element={<TopArtists />} />
                     <Route path='/About' element={<About />} />
+                    <Route path='/Analytics' element={<Analytics />} />
                     <Route path='*' element={<NoPage />} />
                 </Routes>
             </BrowserRouter>
         </div>
     )
 }
+
+export default App;

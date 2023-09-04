@@ -2,9 +2,14 @@
     box-sizing: content-box;
 }
 
+body {
+    background-color: #121212;
+}
+
 .navbar {
     justify-content: space-between;
 }
+
 
 
 

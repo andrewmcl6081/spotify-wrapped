@@ -13,7 +13,7 @@ app.secret_key = "spotify_wrapped"
 #Globals
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = "http://localhost:8080/analytics"
+REDIRECT_URI = "http://localhost:3000/analytics"
 SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-read"
 
 
