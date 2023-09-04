@@ -1,12 +1,9 @@
-import Header from '../components/Header'
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 export default function Home() {
     return (
-        // fractal
         <> 
-            <Header />
+            <Navbar />
             <h2>Home</h2>
         </>
     )
