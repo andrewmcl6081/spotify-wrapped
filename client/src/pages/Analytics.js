@@ -2,7 +2,7 @@
 function Analytics() {
     return (
         <>
-            <h1>Analytics</h1>
+            <h1 style={{color: "white"}}>Analytics</h1>
         </>
     )
 }
