@@ -40,29 +40,29 @@ A web platform designed to provide users with insights into their Spotify listen
    
 3. **Backend Setup**:
 
-  ```bash
-  # Navigate to project directory
-  cd spotify-wrapped
-
-  # Install dependencies
-  pip install -r requirements.txt
-
-  # Start the Flask server
-  python main.py
-  ```
+   ```bash
+   # Navigate to project directory
+   cd spotify-wrapped
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   
+   # Start the Flask server
+   python main.py
+   ```
 
 4. **Frontend Setup**:
 
-  ```bash
-  # Navigate to frontend directory
-  cd wrapify
-  
-  # Install dependencies
-  npm install
-  
-  # Start the development server
-  npm run dev
-  ```
+   ```bash
+   # Navigate to frontend directory
+   cd wrapify
+   
+   # Install dependencies
+   npm install
+   
+   # Start the development server
+   npm run dev
+   ```
    
 6. Open your browser and navigate to **http://localhost:3000** (or whatever port you've set).
 
