@@ -34,7 +34,7 @@ A web platform designed to provide users with insights into their Spotify listen
 2. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-username/spotify-analytics-tool.git
+   git clone https://github.com/your-username/spotify-wrapped.git
    cd spotify-analytics-tool
    ```
    
