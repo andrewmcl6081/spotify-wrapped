@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
+import trackService from '../services/tracks'
 import TrackCard from './TrackCard'
-import { testTrackData } from '../utilities/data'
 
 
 const TrackList = () => {
@@ -9,7 +9,7 @@ const TrackList = () => {
 
     useEffect(() => {
         console.log("setting tracks")
-        setTracks(testTrackData)
+        trackService.getTopTracks().then(tracks => console.log(tracks))
     }, [])
 
     console.log("rendering")
