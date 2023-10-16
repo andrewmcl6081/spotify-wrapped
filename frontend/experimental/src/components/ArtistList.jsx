@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import ArtistCard from './ArtistCard'
-import { testArtistData } from '../utilities/data'
+import artistService from '../services/artists'
 
 const ArtistList = () => {
     const [artists, setArtists] = useState([])
 
     useEffect(() => {
-        setArtists(testArtistData)
+        artistService.getTopArtists().then(artists => setArtists(artists))
     }, [])
 
     return (

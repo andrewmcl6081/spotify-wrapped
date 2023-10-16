@@ -9,7 +9,7 @@ const TrackList = () => {
 
     useEffect(() => {
         console.log("setting tracks")
-        trackService.getTopTracks().then(tracks => console.log(tracks))
+        trackService.getTopTracks().then(tracks => setTracks(tracks))
     }, [])
 
     console.log("rendering")
