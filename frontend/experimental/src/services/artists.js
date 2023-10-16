@@ -1,10 +1,10 @@
 import axios from 'axios'
-const base_url = 'http://localhost:8080/api/top-tracks'
+const base_url = 'http://localhost:8080/api/top-artists'
 
-const getTopTracks = async () => {
+const getTopArtists = async () => {
 
     const response = await axios.get(base_url, { withCredentials: true})
     return response.data
 }
 
-export default { getTopTracks }
+export default { getTopArtists }
