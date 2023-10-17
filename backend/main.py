@@ -3,7 +3,6 @@ from flask_session import Session
 from flask_cors import CORS
 from utils import gen_random_string, get_tokens
 from dotenv import load_dotenv
-from requests import get
 import queries
 import os
 
@@ -41,7 +40,7 @@ def authorize_spotify():
         f"redirect_uri={REDIRECT_URI}&"
         f"state={state}"
     )
-    
+    print("HEREEE")
     return redirect(spotify_authorize_url, code=302)
 
 
@@ -57,11 +56,11 @@ def account_page():
         return "<p>Unauthorized</p>"
     
     access_token, refresh_token = get_tokens(code)
-    
-    response = make_response(redirect("http://localhost:5173/tracks"))
+    print("HERE")
+    response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
     response.set_cookie("access_token", access_token, httponly=True)
     response.set_cookie("refresh_token", refresh_token, httponly=True)
-    
+    print("here")
     return response
 
 @app.route("/api/top-tracks", methods=["GET"])
