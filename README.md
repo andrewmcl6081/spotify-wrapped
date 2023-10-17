@@ -1,8 +1,95 @@
-# React + Vite
+# Wrapify - Spotify Analytics Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web platform designed to provide users with insights into their Spotify listening habits, mimicking the functionality of Spotify Wrapped. Built with Python, Flask, JavaScript, React, Vite, and Bootstrap.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- **User Authentication**: Seamlessly authenticate with Spotify and grant the application permission to access relevant user data.
+- **Top Tracks & Artists**: View your most listened to tracks and artists over various time periods.
+- **Intuitive UI**: A responsive and user-friendly interface that provides a smooth user experience on both desktop and mobile devices.
+- **Data Privacy**: Robust authorization processes to ensure user data privacy and security.
+
+## Technologies Used
+
+- **Backend**: Python, Flask
+- **Frontend**: JavaScript, React, Vite
+- **Styling**: Bootstrap
+- **API**: Spotify
+
+## Getting Started
+
+1. **Prerequisites**: Ensure you have the following installed:
+   - [Python](https://www.python.org/downloads/)
+   - [Node.js and npm](https://nodejs.org/)
+   - [Vite](https://vitejs.dev/guide/)
+   
+2. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/your-username/spotify-wrapped.git
+   cd spotify-analytics-tool
+   ```
+   
+3. **Backend Setup**:
+
+   ```bash
+   # Navigate to project directory
+   cd spotify-wrapped
+   
+   # Install dependencies
+   pip install -r requirements.txt
+   
+   # Start the Flask server
+   python main.py
+   ```
+
+4. **Frontend Setup**:
+
+   ```bash
+   # Navigate to frontend directory
+   cd wrapify
+   
+   # Install dependencies
+   npm install
+   
+   # Start the development server
+   npm run dev
+   ```
+   
+6. Open your browser and navigate to **http://localhost:3000** (or whatever port you've set).
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+MIT License
+
+Copyright (c) [2023] [Hayden Johnson], [Andrew McLaughlin]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
