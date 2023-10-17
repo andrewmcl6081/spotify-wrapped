@@ -29,8 +29,6 @@ def authorize_spotify():
     state = gen_random_string(16)
     session["state"] = state
     
-    print("State from auth url", state)
-    
     # parentheses allow multiple string concatenation
     spotify_authorize_url = (
         f"https://accounts.spotify.com/authorize?"
@@ -72,9 +70,7 @@ def get_top_tracks():
     if not access_token:
         return "<p>Not Authorized</p>"
     
-    
     top_tracks = queries.get_user_top_tracks(access_token, "short_term")
-    
     return top_tracks
 
 
@@ -85,9 +81,7 @@ def get_top_artists():
     if not access_token:
         return "<p>Not Authorized</p>"
     
-    
     top_artists = queries.get_user_top_artists(access_token, "short_term")
-    
     return top_artists
     
     
