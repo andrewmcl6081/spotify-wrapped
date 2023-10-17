@@ -1,9 +1,9 @@
 import axios from 'axios'
-const base_url = 'http://localhost:8080/api/top-tracks'
 
-const getTopTracks = async () => {
-
-    const response = await axios.get(base_url, { withCredentials: true})
+const getTopTracks = async (time_range) => {
+    const url = `http://localhost:8080/api/top-tracks/${time_range}`
+    
+    const response = await axios.get(url, { withCredentials: true})
     return response.data
 }
 
