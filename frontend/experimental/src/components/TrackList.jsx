@@ -3,16 +3,8 @@ import trackService from '../services/tracks'
 import TrackCard from './TrackCard'
 
 
-const TrackList = () => {
-    const [tracks, setTracks] = useState([])
-    console.log("below state")
-
-    useEffect(() => {
-        console.log("setting tracks")
-        trackService.getTopTracks().then(tracks => setTracks(tracks))
-    }, [])
-
-    console.log("rendering")
+const TrackList = ({ tracks }) => {
+    console.log('tracks is ', tracks)
     return (
         <div>
             <h1>My Top Tracks</h1>
