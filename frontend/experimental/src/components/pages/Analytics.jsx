@@ -1,18 +1,15 @@
-import { useEffect } from "react"
+import { Link, Outlet } from 'react-router-dom'
 
 const Analytics = () => {
-
-    const test = async () => {
-        const response = await axios.get('http://localhost:8080/api/top-tracks', {
-            withCredentials: true
-        })
-        console.log(response)
-    }
 
     return (
         <>
             <h1>Analytics Page</h1>
-            <button onClick={test}>Test</button>
+
+            <li><Link to='top-tracks'>Top Tracks</Link></li>
+            <li><Link to='top-artists'>Top Artists</Link></li>
+
+            <Outlet />
         </>
     )
 }
