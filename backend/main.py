@@ -59,7 +59,7 @@ def account_page():
     
     access_token, refresh_token = get_tokens(code)
     
-    response = make_response(redirect("http://localhost:5173/tracks"))
+    response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
     response.set_cookie("access_token", access_token, httponly=True)
     response.set_cookie("refresh_token", refresh_token, httponly=True)
     
