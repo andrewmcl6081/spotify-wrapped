@@ -111,7 +111,6 @@ def get_top_artists(time_range):
     
     
     top_artists = queries.get_user_top_artists(access_token, time_range)
-    
     return top_artists
     
     
