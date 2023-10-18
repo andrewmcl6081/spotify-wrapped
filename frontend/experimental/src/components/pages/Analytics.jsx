@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import Tracks from './Tracks'
 import Artists from './Artists'
 
-const Analytics2 = () => {
+const Analytics = () => {
 
     console.log('in Analytics')
 
@@ -11,14 +11,15 @@ const Analytics2 = () => {
         <>
             <h1>Analytics</h1>
             <li><Link to='/analytics/top-tracks'>Top Tracks</Link></li>
+            <li><Link to='/analytics/top-artists'>Top Artists</Link></li>
 
             <Routes>
                 <Route index element={ <Tracks /> }/>
                 <Route path='top-tracks' element={ <Tracks /> }/>
-                {/* <Route path='top-artists' element={ <Artists /> }/> */}
+                <Route path='top-artists' element={ <Artists /> }/>
             </Routes>
         </>
     )
 }
 
-export default Analytics2
+export default Analytics

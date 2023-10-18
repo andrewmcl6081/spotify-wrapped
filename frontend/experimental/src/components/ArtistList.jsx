@@ -2,13 +2,8 @@ import { useState, useEffect } from 'react'
 import ArtistCard from './ArtistCard'
 import artistService from '../services/artists'
 
-const ArtistList = () => {
-    const [artists, setArtists] = useState([])
-
-    useEffect(() => {
-        artistService.getTopArtists().then(artists => setArtists(artists))
-    }, [])
-
+const ArtistList = ({ artists }) => {
+    console.log(artists)
     return (
         <div>
             <h1>Your Top Artists</h1>
