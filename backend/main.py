@@ -72,7 +72,10 @@ def get_top_tracks(time_range):
     print("token from /top-tracks", access_token)
     
     if not access_token:
-        return "<p>Not Authorized</p>"
+        response = {
+            "error": "Bad Request",
+            "message": "Access token is missing or invalid"
+        }
     
     if time_range not in TIME_RANGES:
         response = {
@@ -86,15 +89,28 @@ def get_top_tracks(time_range):
     return top_tracks
 
 
-@app.route("/api/top-artists", methods=["GET"])
-def get_top_artists():
+@app.route("/api/top-artists/<time_range>", methods=["GET"])
+def get_top_artists(time_range):
+    
     access_token = request.cookies.get("access_token")
     
     if not access_token:
-        return "<p>Not Authorized</p>"
+        response = {
+            "error": "Unauthorized",
+            "message": "Access token is missing or invalid."
+        }
+        return jsonify(response), 401
+    
+    if time_range not in TIME_RANGES:
+        response = {
+            "error": "Bad Request",
+            "message": "Invalid time range. Time range should be 'short_term', 'medium_term', or 'long_term'"
+        }
+        return jsonify(response), 400
     
     
-    top_artists = queries.get_user_top_artists(access_token, "short_term")
+    
+    top_artists = queries.get_user_top_artists(access_token, time_range)
     
     return top_artists
     
