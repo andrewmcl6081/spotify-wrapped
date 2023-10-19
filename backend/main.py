@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request, session, make_response, jsonify
 from flask_session import Session
 from flask_cors import CORS
-from utils import gen_random_string, get_tokens, get_user_id
+from utils import gen_random_string, get_tokens, get_user_id, get_jwt, decode_jwt
 from dotenv import load_dotenv
 from requests import get
 import queries
@@ -61,25 +61,41 @@ def call_back():
     
     # Get User's Spotify ID
     user_id = get_user_id(access_token)
-    print(f"Your UserID: {user_id}")
+    if user_id:
+        jwt = get_jwt(user_id, access_token, refresh_token)
+        
+        response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
+        response.set_cookie("jwt", jwt, httponly=True)
+        return response
     
-    response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
-    response.set_cookie("access_token", access_token, httponly=True)
-    response.set_cookie("refresh_token", refresh_token, httponly=True)
+    else:
+       response = {
+           "error": "Unauthorized",
+           "message": "Failed to authorize"
+       }
+       
+       return jsonify(response), 401
     
-    return response
+    # response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
+    # response.set_cookie("access_token", access_token, httponly=True)
+    # response.set_cookie("refresh_token", refresh_token, httponly=True)
+    
+    # return response
 
 @app.route("/api/top-tracks/<time_range>", methods=["GET"])
 def get_top_tracks(time_range):
     
-    access_token = request.cookies.get("access_token")
-    print("token from /top-tracks", access_token)
+    jwt_cookie = request.cookies.get("jwt")
+    print(f"Cookie is: ", jwt_cookie)
     
-    if not access_token:
-        response = {
-            "error": "Bad Request",
-            "message": "Access token is missing or invalid"
-        }
+    if not jwt_cookie:
+        return jsonify({ "error": "Unauthorized", "message": "JWT invalid or missing."}), 401
+    
+    # Decode JWT and get access and refresh tokens
+    access_token, refresh_token = decode_jwt(jwt_cookie)
+    
+    if not access_token or not refresh_token:
+        return jsonify({ "message": "Unauthorized", "error": "Invalid JWT payload."})
     
     if time_range not in TIME_RANGES:
         response = {
