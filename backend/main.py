@@ -1,7 +1,7 @@
 from flask import Flask, redirect, request, session, make_response, jsonify
 from flask_session import Session
 from flask_cors import CORS
-from utils import gen_random_string, get_tokens
+from utils import gen_random_string, get_tokens, get_user_id
 from dotenv import load_dotenv
 from requests import get
 import queries
@@ -21,7 +21,7 @@ Session(app)
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = "http://localhost:8080/api/callback"
-SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-read user-read-email"
+SCOPE = "user-library-read user-read-recently-played user-top-read user-follow-read user-read-email user-read-private"
 TIME_RANGES = ["short_term", "medium_term", "long_term"]
 
 
@@ -47,7 +47,7 @@ def authorize_spotify():
 
 
 @app.route("/api/callback", methods=["GET"])
-def account_page():
+def call_back():
     
     code = request.args.get("code")
     state = request.args.get("state")
@@ -58,6 +58,10 @@ def account_page():
         return "<p>Unauthorized</p>"
     
     access_token, refresh_token = get_tokens(code)
+    
+    # Get User's Spotify ID
+    user_id = get_user_id(access_token)
+    print(f"Your UserID: {user_id}")
     
     response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
     response.set_cookie("access_token", access_token, httponly=True)

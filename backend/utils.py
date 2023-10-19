@@ -1,9 +1,10 @@
+from dotenv import load_dotenv
+from requests import post, get
+from flask import jsonify
 import random
 import string
 import base64
 import os
-from requests import post
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -11,7 +12,29 @@ load_dotenv()
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
 REDIRECT_URI = "http://localhost:8080/api/callback"
+USER_INFO_URL = "https://api.spotify.com/v1/me"
 
+def get_user_id(access_token):
+    headers = get_auth_header(access_token)
+    
+    try:
+        response = get(USER_INFO_URL, headers=headers)
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            user_id = user_data.get("id")
+            
+            if user_id:
+                return user_id
+            else:
+                return None
+        else:
+            return None
+    
+    except Exception as e:
+        return None
+        
+    
 
 # Random string between 43 to 128 characters
 def gen_random_string(length):
@@ -49,6 +72,7 @@ def get_tokens(code):
         return
     
     json_result = response.json()
+    print("Access Token info", json_result)
     
     return (json_result["access_token"], json_result["refresh_token"])
 
