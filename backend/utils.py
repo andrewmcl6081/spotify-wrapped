@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from requests import post, get
-from flask import jsonify
 import jwt, random, string, base64, os
 
 load_dotenv()
@@ -21,27 +20,12 @@ def get_user_id(access_token):
             user_id = user_data.get("id")
             print("Got user id")
             
-            if user_id:
-                return user_id
-            else:
-                return None
+            return user_id
         else:
             return None
     
     except Exception as e:
         return None
-
-def decode_jwt(jwt_cookie):
-    
-    try:
-        payload = jwt.decode(jwt_cookie, os.getenv("SECRET_KEY"), algorithms=["HS256"])
-        return (payload.get("access_token"), payload.get("refresh_token"))
-        
-    except jwt.ExpiredSignatureError:
-        return jsonify({ "error": "Unauthorized", "message": "JWT has expired."}), 401
-    
-    except jwt.InvalidTokenError:
-        return jsonify({ "error": "Unauthorize", "message": "Invalid JWT."}), 401
         
 def get_jwt(user_id, access_token, refresh_token):
     expiration_time = datetime.utcnow() + timedelta(minutes=60)
