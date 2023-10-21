@@ -1,11 +1,10 @@
 from flask import Flask, redirect, request, session, make_response, jsonify
 from flask_session import Session
 from flask_cors import CORS
-from utils import gen_random_string, get_tokens, get_user_id, get_jwt, decode_jwt
+from utils import gen_random_string, get_tokens, get_user_id, get_jwt, get_auth_header, filter_tracks, filter_artists
 from dotenv import load_dotenv
 from requests import get
-import queries
-import os
+import jwt, os, json
 
 load_dotenv()
 
@@ -42,7 +41,7 @@ def authorize_spotify():
         f"redirect_uri={REDIRECT_URI}&"
         f"state={state}"
     )
-    
+    print("redirecting")
     return redirect(spotify_authorize_url, code=302)
 
 
@@ -57,81 +56,111 @@ def call_back():
     if state is None or state != stored_state:
         return "<p>Unauthorized</p>"
     
-    access_token, refresh_token = get_tokens(code)
     
-    # Get User's Spotify ID
-    user_id = get_user_id(access_token)
-    if user_id:
-        jwt = get_jwt(user_id, access_token, refresh_token)
+    try:
+        access_token, refresh_token = get_tokens(code)
+        print("Access Token: ", access_token)
+        if not access_token or not refresh_token:
+            # Invalid token handling is deferred to except block
+            pass
         
-        response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
-        response.set_cookie("jwt", jwt, httponly=True)
-        return response
+        user_id = get_user_id(access_token)
+        print("User ID: ", user_id)
+        
+        if user_id:
+            jwt = get_jwt(user_id, access_token, refresh_token)
+            redirect_url = f"http://localhost:5173/analytics/top-tracks?jwt={jwt}"
+            
+            return redirect(redirect_url, code=302)
+        else:
+            return jsonify({ "error": "Unauthorized", "message": "Failed to generate JWT"}), 401
+        
+    except Exception as e:
+        return jsonify({ "error": "Unauthorized", "message": "An error occured during token retrieval"}), 500
     
-    else:
-       response = {
-           "error": "Unauthorized",
-           "message": "Failed to authorize"
-       }
-       
-       return jsonify(response), 401
-    
-    # response = make_response(redirect("http://localhost:5173/analytics/top-tracks"))
-    # response.set_cookie("access_token", access_token, httponly=True)
-    # response.set_cookie("refresh_token", refresh_token, httponly=True)
-    
-    # return response
 
 @app.route("/api/top-tracks/<time_range>", methods=["GET"])
 def get_top_tracks(time_range):
-    
-    jwt_cookie = request.cookies.get("jwt")
-    print(f"Cookie is: ", jwt_cookie)
-    
-    if not jwt_cookie:
-        return jsonify({ "error": "Unauthorized", "message": "JWT invalid or missing."}), 401
-    
-    # Decode JWT and get access and refresh tokens
-    access_token, refresh_token = decode_jwt(jwt_cookie)
-    
-    if not access_token or not refresh_token:
-        return jsonify({ "message": "Unauthorized", "error": "Invalid JWT payload."})
-    
+    print("TOP of GTT")
     if time_range not in TIME_RANGES:
-        response = {
-            "error": "Bad Request",
-            "message": "Invalid time range. Time range should be 'short_term', 'medium_term', or 'long_term'"
-        }
-        return jsonify(response), 400
-        
+        return jsonify({ "error": "Bad Request", "message": "Invalid time range. Time range should be 'short_term', 'medium_term', or 'long_term'" }), 400
     
-    top_tracks = queries.get_user_top_tracks(access_token, time_range)
-    return top_tracks
+    authorization_header = request.headers.get("Authorization")
+    
+    if not authorization_header:
+        return jsonify({ "error": "Unauthorized", "message": "JWT invalid or missing from the header."}), 401
+    
+    try:
+        jwt_token = authorization_header.split("Bearer ")[1]
+        
+        payload = jwt.decode(jwt_token, os.getenv("SECRET_KEY"), algorithms=["HS256"])
+        access_token, refresh_token = payload.get("access_token"), payload.get("refresh_token")
+        
+    except jwt.ExpiredSignatureError:
+        return jsonify({ "error": "Unauthorized", "message": "JWT has expired."}), 401
+    except jwt.DecodeError:
+        return jsonify({ "error": "Unauthorized", "message": "Failed to decode JWT."}), 401
+    
+    
+    # Fetch User's top tracks from spotify
+    try:
+        print("Trying to fetch users top tracks")
+        url = f"https://api.spotify.com/v1/me/top/tracks?time_range={time_range}&limit=5"
+        headers = get_auth_header(access_token)
+        
+        response = get(url, headers=headers)
+        
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            
+            return filter_tracks(data["items"])
+        else:
+            return jsonify({ "error": "Bad Request", "message": "Failed to fetch top tracks from Spotify."})
+    
+    except Exception as e:
+        return jsonify({ "error": "Internal Server Error", "message": str(e)}), 500
 
 
 @app.route("/api/top-artists/<time_range>", methods=["GET"])
 def get_top_artists(time_range):
-    
-    access_token = request.cookies.get("access_token")
-    
-    if not access_token:
-        response = {
-            "error": "Unauthorized",
-            "message": "Access token is missing or invalid."
-        }
-        return jsonify(response), 401
-    
+    print("TOP of GTA")
     if time_range not in TIME_RANGES:
-        response = {
-            "error": "Bad Request",
-            "message": "Invalid time range. Time range should be 'short_term', 'medium_term', or 'long_term'"
-        }
-        return jsonify(response), 400
+        return jsonify({ "error": "Bad Request", "message": "Invalid time range. Time range should be 'short_term', 'medium_term', or 'long_term'" }), 400
+    
+    authorization_header = request.headers.get("Authorization")
+    
+    if not authorization_header:
+        return jsonify({ "error": "Unauthorized", "message": "JWT invalid or missing from the header."}), 401
+    
+    try:
+        jwt_token = authorization_header.split("Bearer ")[1]
+        
+        payload = jwt.decode(jwt_token, os.getenv("SECRET_KEY"), algorithms=["HS256"])
+        access_token, refresh_token = payload.get("access_token"), payload.get("refresh_token")
+        
+    except jwt.ExpiredSignatureError:
+        return jsonify({ "error": "Unauthorized", "message": "JWT has expired."}), 401
+    except jwt.DecodeError:
+        return jsonify({ "error": "Unauthorized", "message": "Failed to decode JWT."}), 401
     
     
+    # Fetch User's top artists from spotify
+    try:
+        print("Trying to fetch users top artists")
+        url = f"https://api.spotify.com/v1/me/top/artists?time_range={time_range}&limit=5"
+        headers = get_auth_header(access_token)
+        
+        response = get(url, headers=headers)
+        
+        if response.status_code == 200:
+            data = json.loads(response.text)
+            
+            return filter_artists(data["items"])
+        else:
+            return jsonify({ "error": "Bad Request", "message": "Failed to fetch top artists from Spotify."})
     
-    top_artists = queries.get_user_top_artists(access_token, time_range)
-    return top_artists
+    except Exception as e:
+        return jsonify({ "error": "Internal Server Error", "message": str(e)}), 500
     
     
 if __name__ == '__main__':
