@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import Tracks from './Tracks'
 import Artists from './Artists'
 
-const Analytics = () => {
+const Analytics = ({ isAuthorized }) => {
 
-    console.log('in Analytics')
+    console.log('in Analytics authorized is', isAuthorized)
 
     return(
         <>
@@ -14,8 +14,8 @@ const Analytics = () => {
             <li><Link to='/analytics/top-artists'>Top Artists</Link></li>
 
             <Routes>
-                <Route index element={ <Tracks /> }/>
-                <Route path='top-tracks' element={ <Tracks /> }/>
+                <Route index element={ <Tracks isAuthorized={isAuthorized} /> }/>
+                <Route path='top-tracks' element={ <Tracks isAuthorized={isAuthorized} /> }/>
                 <Route path='top-artists' element={ <Artists /> }/>
             </Routes>
         </>

@@ -2,14 +2,16 @@ import { useState, useEffect } from 'react'
 import trackService from '../../services/tracks'
 import TrackList from '../TrackList'
 
-const Tracks = () => {
-
+const Tracks = ({ isAuthorized }) => {
+    console.log("Top of tracks authorized is ", isAuthorized)
     const [tracks, setTracks] = useState({})
     const [selectedTab, setSelectedTab] = useState('short_term')
     
     useEffect(() => {
-        fetchData()
-    }, [])
+        if(isAuthorized) {
+            fetchData()
+        }
+    }, [isAuthorized])
 
     const fetchData = async () => {
         try {
