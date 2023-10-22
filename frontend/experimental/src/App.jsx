@@ -1,3 +1,4 @@
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem } from '@mui/material'
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap'
 import { Link, Route, Routes, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -7,6 +8,7 @@ import About from './components/pages/About'
 import Analytics from './components/pages/Analytics'
 import Tracks from './components/pages/Tracks'
 import Artists from './components/pages/Artists'
+import NavigationBar from './components/NavigationBar'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles/custom-styles.css'
@@ -43,6 +45,7 @@ const App = () => {
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
+            <NavigationBar/>
             
             <Routes>
                 <Route path='/' element={<Home />}></Route>
