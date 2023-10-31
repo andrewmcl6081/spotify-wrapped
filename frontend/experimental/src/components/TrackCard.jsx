@@ -1,19 +1,56 @@
+import { Card, CardMedia, CardContent, Typography } from '@mui/material'
+
+const styles = {
+  card: {
+    display: 'inline-block',
+    maxWidth: 345,
+    margin: '0.5rem',
+    backgroundColor: '#f5f5f5',
+    borderWidth: '0.25rem',
+    borderRadius: '0.5rem',
+    padding: '1rem',
+    margin: '0.5rem',
+    boxShadow: '4px 4px 8px 0px rgba( 0, 0, 0, 0.2 )'
+  },
+
+  grow: {
+    MozOsxFontSmoothing: 'grayscale',
+    backfaceVisibility: 'hidden',
+    transform: 'translateZ(0)',
+    transition: 'transform 0.25s ease-out',
+    '&:hover, &:focus': {
+      transform: 'scale(1.05)',
+    },
+    '&:active': {
+      transform: 'scale(0.90)',
+    },
+  }
+}
 
 const TrackCard = ({ albumImages, trackName, trackArtists }) => {
-    console.log("in track card")
-    const albumImage = albumImages[1]["url"]
-
-    return (
-        <div>
-            <img src={albumImage}/>
-            <h2>{trackName}</h2>
-            <div>
-                {trackArtists.map((artist, index) => (
-                    <p key={index}>{artist}</p>
-                ))}
-            </div>
-        </div>
-    )
+  const albumImage_url = albumImages[1]["url"]
+  console.log(albumImages)
+  return (
+    <>
+      <Card sx={{ ...styles.card, ...styles.grow }} >
+        <CardMedia
+          component='img'
+          alt={`${trackName} Cover Image`}
+          height='300'
+          image={albumImage_url}
+          title={`${trackName} Cover Image`}
+        />
+        <CardContent>
+          <Typography gutterBottom variant='h5' component='div'>
+            {trackName.split('(')[0].trim()}
+          </Typography>
+          <Typography variant='body2' color='text.secondary'>
+            {trackArtists.join(', ')}
+          </Typography>
+        </CardContent>
+      </Card>
+    </>
+  )
 }
 
 export default TrackCard

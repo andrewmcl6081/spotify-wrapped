@@ -18,8 +18,6 @@ const App = () => {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [anchorElNav, setAnchorElNav] = useState(null)
 
-  console.log("Top of App")
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const jwt = urlParams.get("jwt")
@@ -40,13 +38,12 @@ const App = () => {
     setAnchorElNav(null)
   }
 
-  console.log("Rendering App's children")
   return (
     <>
       <AppBar position='static' color='secondary'>
         <Container maxWidth='xl'>
           <Toolbar disableGutters>
-            <AlbumIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <AlbumIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1  }} />
             <Typography
               variant='h6'
               noWrap
@@ -58,8 +55,8 @@ const App = () => {
                 fontFamily: 'monospace',
                 fontWeight: 700,
                 letterSpacing: '.3rem',
-                color: 'inherit',
                 textDecoration: 'none',
+                color: 'white'
               }}
             >
               Wrapify
@@ -72,9 +69,8 @@ const App = () => {
                 aria-controls='menu-appbar'
                 aria-haspopup='true'
                 onClick={handleOpenNavMenu}
-                color='inherit'
               >
-                <MenuIcon />
+                <MenuIcon sx={{ color: 'white' }}/>
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -98,7 +94,7 @@ const App = () => {
                   authPages.map((page) => (
                     <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                       <MenuItem onClick={handleCloseNavMenu}>
-                        <Typography textAlign='center'>{page}</Typography>
+                        <Typography textAlign='center' >{page}</Typography>
                       </MenuItem>
                     </Link>
                   ))
@@ -106,7 +102,7 @@ const App = () => {
                   pages.map((page) => (
                     <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                       <MenuItem onClick={handleCloseNavMenu}>
-                        <Typography textAlign='center'>{page}</Typography>
+                        <Typography textAlign='center' >{page}</Typography>
                       </MenuItem>
                     </Link>
                   ))
@@ -126,8 +122,8 @@ const App = () => {
                 fontFamily: 'monospace',
                 fontWeight: 700,
                 letterSpacing: '.3rem',
-                color: 'inherit',
                 textDecoration: 'none',
+                color: 'white'
               }}
             >
               Wrapify
@@ -138,7 +134,7 @@ const App = () => {
                   <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                     <Button
                       onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: 'white', display: 'block'}}
+                      sx={{ my: 2, color: 'white', display: 'block' }}
                     >
                       {page}
                     </Button>

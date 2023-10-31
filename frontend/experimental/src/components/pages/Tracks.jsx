@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import trackService from '../../services/tracks'
 import TrackList from '../TrackList'
+import MediaCard from '../MediaCard'
 
 const Tracks = ({ isAuthorized }) => {
     console.log("Top of tracks authorized is ", isAuthorized)
@@ -20,7 +21,7 @@ const Tracks = ({ isAuthorized }) => {
                 trackService.getTopTracks('medium_term'),
                 trackService.getTopTracks('long_term')
             ])
-                
+            console.log(trackDataShort)
             const trackData = {
                 'short_term': [...trackDataShort],
                 'medium_term': [...trackDataMedium],

@@ -1,9 +1,10 @@
+import HeroCenter from '../HeroCenter'
 
 const About = () => {
 
     return (
         <>
-            <h1>About Page</h1>
+            <HeroCenter />
         </>
     )
 }

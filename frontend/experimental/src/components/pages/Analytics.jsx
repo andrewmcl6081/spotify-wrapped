@@ -5,8 +5,6 @@ import Artists from './Artists'
 
 const Analytics = ({ isAuthorized }) => {
 
-    console.log('in Analytics authorized is', isAuthorized)
-
     return(
         <>
             <h1>Analytics</h1>
