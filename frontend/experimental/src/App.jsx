@@ -14,6 +14,12 @@ import './styles/custom-styles.css'
 const pages = ['Home', 'About']
 const authPages = ['Home', 'About', 'Analytics']
 
+const styles = {
+  appBar: {
+    background: 'rgba(0,0,0,.8)'
+  }
+}
+
 const App = () => {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [anchorElNav, setAnchorElNav] = useState(null)
@@ -40,7 +46,7 @@ const App = () => {
 
   return (
     <>
-      <AppBar position='static' color='secondary'>
+      <AppBar position='static' sx={styles.appBar}>
         <Container maxWidth='xl'>
           <Toolbar disableGutters>
             <AlbumIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1  }} />
@@ -53,16 +59,17 @@ const App = () => {
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
                 fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
+                fontWeight: 400,
+                fontSize: '24px',
+                letterSpacing: '.1rem',
                 textDecoration: 'none',
-                color: 'white'
+                color: '#B0E0E6'
               }}
             >
               Wrapify
             </Typography>
 
-            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }}}>
               <IconButton
                 size='large'
                 aria-label='navigation'
@@ -70,7 +77,7 @@ const App = () => {
                 aria-haspopup='true'
                 onClick={handleOpenNavMenu}
               >
-                <MenuIcon sx={{ color: 'white' }}/>
+                <MenuIcon sx={{ color: '#B0E0E6' }}/>
               </IconButton>
               <Menu
                 id='menu-appbar'
@@ -94,7 +101,7 @@ const App = () => {
                   authPages.map((page) => (
                     <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                       <MenuItem onClick={handleCloseNavMenu}>
-                        <Typography textAlign='center' >{page}</Typography>
+                        <Typography textAlign='center' sx={{ color: '#B0E0E6'}} >{page}</Typography>
                       </MenuItem>
                     </Link>
                   ))
@@ -102,7 +109,7 @@ const App = () => {
                   pages.map((page) => (
                     <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                       <MenuItem onClick={handleCloseNavMenu}>
-                        <Typography textAlign='center' >{page}</Typography>
+                        <Typography textAlign='center' sx={{ color: '#B0E0E6'}} >{page}</Typography>
                       </MenuItem>
                     </Link>
                   ))
@@ -123,7 +130,7 @@ const App = () => {
                 fontWeight: 700,
                 letterSpacing: '.3rem',
                 textDecoration: 'none',
-                color: 'white'
+                color: '#B0E0E6'
               }}
             >
               Wrapify
@@ -134,7 +141,7 @@ const App = () => {
                   <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                     <Button
                       onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: 'white', display: 'block' }}
+                      sx={{ my: 2, color: '#B0E0E6', display: 'block' }}
                     >
                       {page}
                     </Button>
@@ -145,7 +152,7 @@ const App = () => {
                   <Link key={page} to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none' }}>
                     <Button
                       onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: 'white', display: 'block'}}
+                      sx={{ my: 2, color: '#B0E0E6', display: 'block'}}
                     >
                       {page}
                     </Button>
