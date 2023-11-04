@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
-import { Box, Typography } from '@mui/material'
-
+import { Box } from '@mui/material'
 import TrackCard from './TrackCard'
 
 const styles = {
@@ -15,7 +13,7 @@ const styles = {
 }
 
 const TrackList = ({ tracks }) => {
-  console.log('tracks is ', tracks)
+  
   return (
     <>
       <Box sx={styles.container}>

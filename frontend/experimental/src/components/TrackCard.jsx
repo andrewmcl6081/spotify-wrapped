@@ -13,6 +13,11 @@ const styles = {
     boxShadow: '4px 4px 8px 0px rgba( 0, 0, 0, 0.2 )'
   },
 
+  cardMedia: {
+    width: '300px',
+    height: '300px'
+  },
+
   grow: {
     MozOsxFontSmoothing: 'grayscale',
     backfaceVisibility: 'hidden',
@@ -29,7 +34,7 @@ const styles = {
 
 const TrackCard = ({ albumImages, trackName, trackArtists }) => {
   const albumImage_url = albumImages[1]["url"]
-  console.log(albumImages)
+  
   return (
     <>
       <Card sx={{ ...styles.card, ...styles.grow }} >
@@ -39,6 +44,7 @@ const TrackCard = ({ albumImages, trackName, trackArtists }) => {
           height='300'
           image={albumImage_url}
           title={`${trackName} Cover Image`}
+          sx={styles.cardMedia}
         />
         <CardContent>
           <Typography gutterBottom variant='h5' component='div'>

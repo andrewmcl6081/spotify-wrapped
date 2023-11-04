@@ -92,13 +92,13 @@ const Tracks = ({ isAuthorized }) => {
           sx={styles.btnGroup}
         >
           <ToggleButton value='short_term' aria-label='Short Term'>
-            Short Term
+            Weekly
           </ToggleButton>
-          <ToggleButton value='medium_term' aria-label='Mediu, Term'>
-            Medium Term
+          <ToggleButton value='medium_term' aria-label='Medium Term'>
+            6 Months
           </ToggleButton>
           <ToggleButton value='long_term' aria-label='Long Term'>
-            Long Term
+            Yearly
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>

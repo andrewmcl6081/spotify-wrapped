@@ -1,55 +1,114 @@
 import { useState, useEffect } from 'react'
+import { Backdrop, CircularProgress, Typography, ToggleButton, ToggleButtonGroup, Box} from '@mui/material'
 import artistService from '../../services/artists'
 import ArtistList from '../ArtistList'
 
-const Artists = () => {
+const styles = {
+  btnGroup: {
+    '.MuiToggleButton-root': {
+      color: '#B0E0E6',
+      borderColor: '#B0E0E6',
+      '&.Mui-selected': {
+        color: '#fff',
+        backgroundColor: '#B0E0E6',
+        '&:hover': {
+          backgroundColor: '#89C2D9',
+        },
+      },
+      '&:hover': {
+        backgroundColor: '#DAF4F0'
+      }
+    }
+  },
 
-    const [artists, setArtists] = useState({})
-    const [selectedTab, setSelectedTab] = useState('short_term')
+  toggleContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '10px 20px 20px 20px'
+  }
+}
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+const Artists = ({ isAuthorized }) => {
+  const [artists, setArtists] = useState({})
+  const [selectedTab, setSelectedTab] = useState('short_term')
+  const [dataLoading, setDataLoading] = useState(true)
 
-    const fetchData = async () => {
-        try {
-            const [artistDataShort, artistDataMedium, artistDataLong] = await Promise.all([
-                artistService.getTopArtists('short_term'),
-                artistService.getTopArtists('medium_term'),
-                artistService.getTopArtists('long_term')
-            ])
+  useEffect(() => {
+    if(isAuthorized) {
+      fetchData()
+    }
+  }, [isAuthorized])
 
-            const artistData = {
-                'short_term': [...artistDataShort],
-                'medium_term': [...artistDataMedium],
-                'long_term': [...artistDataLong]
-            }
+  const fetchData = async () => {
+    try {
+      const [artistDataShort, artistDataMedium, artistDataLong] = await Promise.all([
+            artistService.getTopArtists('short_term'),
+            artistService.getTopArtists('medium_term'),
+            artistService.getTopArtists('long_term')])
 
-            setArtists(artistData)
-        }
-        catch (error) {
-            console.error('Error fetching data', error)
-        }
+      const artistData = {
+        'short_term': [...artistDataShort],
+        'medium_term': [...artistDataMedium],
+        'long_term': [...artistDataLong]
+      }
+
+      setArtists(artistData)
+    }
+    catch (error) {
+      console.error('Error fetching data', error)
     }
 
-    const handleTabSwitch = (time_range) => {
-        setSelectedTab(time_range)
-    }
+    setDataLoading(false)
+  }
 
-    return (
-        <>
-            <div>
-                <button onClick={() => handleTabSwitch('short_term')}>Short</button>
-                <button onClick={() => handleTabSwitch('medium_term')}>Medium</button>
-                <button onClick={() => handleTabSwitch('long_term')}>Long</button>
-            </div>
-            <div>
-                {selectedTab === 'short_term' && <ArtistList artists={artists['short_term'] || []} />}
-                {selectedTab === 'medium_term' && <ArtistList artists={artists['medium_term'] || []} />}
-                {selectedTab === 'long_term' && <ArtistList artists={artists['long_term'] || []} />}
-            </div>
-        </>
-    )
+  const handleTabSwitch = (time_range) => {
+    setSelectedTab(time_range)
+  }
+
+  const newHandleTabSwitch = (event, newTimeRange) => {
+    if(newTimeRange !== null) {
+      setSelectedTab(newTimeRange)
+    }
+  }
+
+  return (
+    <>
+      <div>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1}}
+          open={dataLoading}
+        >
+          <CircularProgress sx={{ color: '#B0E0E6'}} />
+        </Backdrop>
+      </div>
+
+      <Box sx={styles.toggleContainer}>
+        <ToggleButtonGroup
+          value={selectedTab}
+          exclusive
+          onChange={newHandleTabSwitch}
+          aria-label='Time range'
+          sx={styles.btnGroup}
+        >
+          <ToggleButton value='short_term' aria-label='Short Term'>
+            Weekly
+          </ToggleButton>
+          <ToggleButton value='medium_term' aria-label='Medium Term'>
+            6 Months
+          </ToggleButton>
+          <ToggleButton value='long_term' aria-label='Long Term'>
+            Yearly
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
+      <div>
+        {selectedTab === 'short_term' && <ArtistList artists={artists['short_term'] || []} />}
+        {selectedTab === 'medium_term' && <ArtistList artists={artists['medium_term'] || []} />}
+        {selectedTab === 'long_term' && <ArtistList artists={artists['long_term'] || []} />}
+      </div>
+    </>
+  )
 }
 
 export default Artists

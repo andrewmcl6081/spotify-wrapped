@@ -77,7 +77,7 @@ const Analytics = ({ isAuthorized }) => {
       <Routes>
         <Route index element={ <Tracks isAuthorized={isAuthorized} /> }/>
         <Route path='top-tracks' element={ <Tracks isAuthorized={isAuthorized} /> }/>
-        <Route path='top-artists' element={ <Artists /> }/>
+        <Route path='top-artists' element={ <Artists isAuthorized={isAuthorized} /> }/>
       </Routes>
     </>
   )
