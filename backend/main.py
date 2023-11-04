@@ -105,7 +105,7 @@ def get_top_tracks(time_range):
     # Fetch User's top tracks from spotify
     try:
         print("Trying to fetch users top tracks")
-        url = f"https://api.spotify.com/v1/me/top/tracks?time_range={time_range}&limit=6"
+        url = f"https://api.spotify.com/v1/me/top/tracks?time_range={time_range}&limit=12"
         headers = get_auth_header(access_token)
         
         response = get(url, headers=headers)
@@ -147,7 +147,7 @@ def get_top_artists(time_range):
     # Fetch User's top artists from spotify
     try:
         print("Trying to fetch users top artists")
-        url = f"https://api.spotify.com/v1/me/top/artists?time_range={time_range}&limit=6"
+        url = f"https://api.spotify.com/v1/me/top/artists?time_range={time_range}&limit=12"
         headers = get_auth_header(access_token)
         
         response = get(url, headers=headers)
