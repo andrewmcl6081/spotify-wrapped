@@ -9,7 +9,6 @@ const styles = {
     borderWidth: '0.25rem',
     borderRadius: '0.5rem',
     padding: '1rem',
-    margin: '0.5rem',
     boxShadow: '4px 4px 8px 0px rgba( 0, 0, 0, 0.2 )'
   },
 

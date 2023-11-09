@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Route, Routes, Link, useNavigate} from 'react-router-dom'
+import { Route, Routes, useNavigate} from 'react-router-dom'
 import { Typography, ToggleButton, ToggleButtonGroup, Box } from '@mui/material'
 import Tracks from './Tracks'
 import Artists from './Artists'
