@@ -1,0 +1,18 @@
+html {
+    height: 100%;
+    background-image: linear-gradient(to right bottom, rgb(71, 82, 78), rgb(0, 0, 0)), linear-gradient(transparent, rgb(0, 0, 0));
+    background-repeat: no-repeat;
+}
+
+body {
+    min-height: 100%; /* ensures the body takes up at least the full height of the html element */
+    background-image: linear-gradient(to right bottom, rgb(71, 82, 78), rgb(0, 0, 0)), linear-gradient(transparent, rgb(0, 0, 0));
+    background-repeat: no-repeat;
+    line-height: 1.5;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}

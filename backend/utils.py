@@ -1,18 +1,46 @@
-import random
-import string
-import base64
-import os
-from requests import post
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from requests import post, get
+import jwt, random, string, base64, os
 
 load_dotenv()
 
 #Globals
-CLIENT_ID = os.getenv("CLIENT_ID")
-CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = "http://localhost:8080/analytics"
+REDIRECT_URI = "http://localhost:8080/api/callback"
+USER_INFO_URL = "https://api.spotify.com/v1/me"
 
-
+def get_user_id(access_token):
+    headers = get_auth_header(access_token)
+    
+    try:
+        response = get(USER_INFO_URL, headers=headers)
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            user_id = user_data.get("id")
+            print("Got user id")
+            
+            return user_id
+        else:
+            return None
+    
+    except Exception as e:
+        return None
+        
+def get_jwt(user_id, access_token, refresh_token):
+    expiration_time = datetime.utcnow() + timedelta(minutes=60)
+    
+    jwt_payload = {
+        "user_id": user_id,
+        "authorized": True,
+        "exp": expiration_time,
+        "access_token": access_token,
+        "refresh_token": refresh_token
+    }
+    
+    jwt_token = jwt.encode(jwt_payload, os.getenv("SECRET_KEY"), algorithm="HS256")
+    return jwt_token
+    
 # Random string between 43 to 128 characters
 def gen_random_string(length):
     text = ""
@@ -24,7 +52,7 @@ def gen_random_string(length):
     return text
 
 def get_tokens(code):
-    auth_string = CLIENT_ID + ":" + CLIENT_SECRET
+    auth_string = os.getenv("CLIENT_ID") + ":" + os.getenv("CLIENT_SECRET")
     auth_bytes = auth_string.encode("ascii")
     base64_bytes = base64.b64encode(auth_bytes)
     base64_auth = base64_bytes.decode("ascii")
@@ -49,6 +77,7 @@ def get_tokens(code):
         return
     
     json_result = response.json()
+    print("Access Token info", json_result)
     
     return (json_result["access_token"], json_result["refresh_token"])
 
