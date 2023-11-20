@@ -29,7 +29,6 @@ const App = () => {
     const jwt = urlParams.get("jwt")
 
     if(jwt) {
-      console.log("Receieved JWT, saving to local storage")
       localStorage.setItem('jwt', jwt)
       setIsAuthorized(true)
     }
