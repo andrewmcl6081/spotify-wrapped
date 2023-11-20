@@ -19,9 +19,4 @@ app.use(session({
 app.use('/api/auth', authRouter)
 app.use('/api/query', queryRouter)
 
-app.get('/api', (req, res) => {
-  console.log('requested')
-  res.json({ message: "Hello from Express!!!" });
-});
-
 module.exports = app
