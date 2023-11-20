@@ -61,11 +61,7 @@ const Artists = ({ isAuthorized }) => {
     setDataLoading(false)
   }
 
-  const handleTabSwitch = (time_range) => {
-    setSelectedTab(time_range)
-  }
-
-  const newHandleTabSwitch = (event, newTimeRange) => {
+  const handleTabSwitch = (event, newTimeRange) => {
     if(newTimeRange !== null) {
       setSelectedTab(newTimeRange)
     }
@@ -86,7 +82,7 @@ const Artists = ({ isAuthorized }) => {
         <ToggleButtonGroup
           value={selectedTab}
           exclusive
-          onChange={newHandleTabSwitch}
+          onChange={handleTabSwitch}
           aria-label='Time range'
           sx={styles.btnGroup}
         >

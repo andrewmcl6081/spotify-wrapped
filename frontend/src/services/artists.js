@@ -15,7 +15,7 @@ const getTopArtists = async (time_range) => {
     }
 
     try {
-        const response = await axios.get(url, config)
+        const response = await axios.get(`/api/query/top-artists/${time_range}`, config)
         return response.data
     }
     catch (error) {

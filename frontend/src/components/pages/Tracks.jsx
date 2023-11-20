@@ -46,7 +46,6 @@ const Tracks = ({ isAuthorized }) => {
             trackService.getTopTracks('medium_term'),
             trackService.getTopTracks('long_term')])
 
-      console.log(trackDataShort)
       const trackData = {
         'short_term': [...trackDataShort],
         'medium_term': [...trackDataMedium],
@@ -61,12 +60,8 @@ const Tracks = ({ isAuthorized }) => {
 
     setDataLoading(false)
   }
-    
-  const handleTabSwitch = (time_range) => {
-    setSelectedTab(time_range)
-  }
 
-  const newHandleTabSwitch = (event, newTimeRange) => {
+  const handleTabSwitch = (event, newTimeRange) => {
     if(newTimeRange !== null) {
       setSelectedTab(newTimeRange)
     }
@@ -87,7 +82,7 @@ const Tracks = ({ isAuthorized }) => {
         <ToggleButtonGroup
           value={selectedTab}
           exclusive
-          onChange={newHandleTabSwitch}
+          onChange={handleTabSwitch}
           aria-label='Time range'
           sx={styles.btnGroup}
         >

@@ -15,7 +15,7 @@ const getTopTracks = async (time_range) => {
     }
 
     try {
-        const response = await axios.get(url, config)
+        const response = await axios.get(`/api/query/top-tracks/${time_range}`, config)
         return response.data
     }
     catch (error) {
