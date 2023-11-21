@@ -8,7 +8,7 @@ const path = require('path')
 const app = express()
 
 app.use(cors())
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, 'dist')))
 
 app.use(session({
   secret: process.env.SECRET_KEY,
@@ -18,5 +18,9 @@ app.use(session({
 
 app.use('/api/auth', authRouter)
 app.use('/api/query', queryRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 module.exports = app

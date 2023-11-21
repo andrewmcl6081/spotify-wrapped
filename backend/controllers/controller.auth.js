@@ -1,7 +1,8 @@
 const authRouter = require('express').Router()
 const utils = require('../utils/utils')
 
-const REDIRECT_URI = 'http://localhost:3001/api/auth/callback'
+//const REDIRECT_URI = 'http://localhost:3001/api/auth/callback'
+const REDIRECT_URI = 'https://young-meadow-2700.fly.dev/api/auth/callback'
 const SCOPE = 'user-library-read user-read-recently-played user-top-read user-follow-read user-read-email user-read-private'
 
 authRouter.get('/login', async (req, res) => {
@@ -52,7 +53,8 @@ authRouter.get('/callback', async (req, res) => {
     if(userId !== null) {
       const jwtToken = utils.getJwt(userId, accessToken, refreshToken)
       console.log(jwtToken)
-      const redirectUrl = `http://localhost:5173/analytics/top-tracks?jwt=${jwtToken}`
+      //const redirectUrl = `http://localhost:5173/analytics/top-tracks?jwt=${jwtToken}`
+      const redirectUrl = `https://young-meadow-2700.fly.dev/analytics/top-tracks?jwt=${jwtToken}`
       res.redirect(redirectUrl)
     }
     else {
