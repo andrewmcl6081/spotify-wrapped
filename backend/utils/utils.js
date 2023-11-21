@@ -4,8 +4,7 @@ const dotenv = require('dotenv')
 const jwt = require('jsonwebtoken')
 dotenv.config()
 
-//const REDIRECT_URI = 'http://localhost:3001/api/auth/callback'
-const REDIRECT_URI = 'https://young-meadow-2700.fly.dev/api/auth/callback'
+const REDIRECT_URI = process.env.REDIRECT_URI || 'https://young-meadow-2700.fly.dev/api/auth/callback'
 const USER_INFO_URL = 'https://api.spotify.com/v1/me'
 
 const getAuthHeader = (token) => {
