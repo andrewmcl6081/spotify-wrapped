@@ -23,7 +23,6 @@ queryRouter.get('/top-tracks/:timeRange', async (req, res) => {
     const payload = jwt.verify(jwtToken, process.env.SECRET_KEY, { algorithm: 'HS256' })
     const { accessToken } = payload
 
-    console.log('Access Token from /top-tracks ', accessToken)
 
     const url = `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}&limit=12`
     const headers = utils.getAuthHeader(accessToken)
@@ -68,7 +67,6 @@ queryRouter.get('/top-artists/:timeRange', async (req, res) => {
     const payload = jwt.verify(jwtToken, process.env.SECRET_KEY, { algorithm: 'HS256' })
     const { accessToken } = payload
 
-    console.log('Access Token from /top-artists ', accessToken)
 
     const url = `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}&limit=12`
     const headers = utils.getAuthHeader(accessToken)

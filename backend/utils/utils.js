@@ -18,7 +18,6 @@ const getUserId = async (accessToken) => {
     const response = await axios.get(USER_INFO_URL, { headers })
 
     if(response.status === 200) {
-      console.log('Got user id')
       return response.data.id
     }
     else {
@@ -33,7 +32,7 @@ const getUserId = async (accessToken) => {
 
 const getJwt = (userId, accessToken, refreshToken) => {
   const expirationTime = Math.floor(Date.now() / 1000) + (60 * 60) // 60 minutes from now
-  console.log('Creating token')
+
   const jwtPayload = {
     userId: userId,
     authorized: true,
@@ -55,8 +54,6 @@ const getTokens = async (code) => {
 
   const url = 'https://accounts.spotify.com/api/token'
 
-  console.log('in utils get tokens')
-
   const data = new URLSearchParams({
     grant_type: 'authorization_code',
     code: code,
@@ -71,8 +68,6 @@ const getTokens = async (code) => {
 
   try {
     const response = await axios.post(url, data, { headers })
-
-    console.log('Access Token info: ', response.data)
 
     return {
       accessToken: response.data.access_token,
