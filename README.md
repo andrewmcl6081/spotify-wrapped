@@ -19,15 +19,14 @@ A web platform designed to provide users with insights into their Spotify listen
 
 ## Technologies Used
 
-- **Backend**: Python, Flask
+- **Backend**: JavaScript, Express
 - **Frontend**: JavaScript, React, Vite
-- **Styling**: Bootstrap
+- **Styling**: Bootstrap, MUI
 - **API**: Spotify
 
 ## Getting Started
 
 1. **Prerequisites**: Ensure you have the following installed:
-   - [Python](https://www.python.org/downloads/)
    - [Node.js and npm](https://nodejs.org/)
    - [Vite](https://vitejs.dev/guide/)
    
@@ -42,20 +41,20 @@ A web platform designed to provide users with insights into their Spotify listen
 
    ```bash
    # Navigate to project directory
-   cd spotify-wrapped
+   cd spotify-wrapped/backend
    
    # Install dependencies
-   pip install -r requirements.txt
+   npm install
    
    # Start the Flask server
-   python main.py
+   npm start
    ```
 
 4. **Frontend Setup**:
 
    ```bash
    # Navigate to frontend directory
-   cd wrapify
+   cd spotify-wrapped/frontend
    
    # Install dependencies
    npm install
