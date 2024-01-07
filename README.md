@@ -28,13 +28,12 @@ A web platform designed to provide users with insights into their Spotify listen
 
 1. **Prerequisites**: Ensure you have the following installed:
    - [Node.js and npm](https://nodejs.org/)
-   - [Vite](https://vitejs.dev/guide/)
    
 2. **Clone the Repository**:
 
    ```bash
    git clone https://github.com/your-username/spotify-wrapped.git
-   cd spotify-analytics-tool
+   cd spotify-wrapped
    ```
    
 3. **Backend Setup**:
@@ -47,7 +46,7 @@ A web platform designed to provide users with insights into their Spotify listen
    npm install
    
    # Start the Flask server
-   npm start
+   npm run dev
    ```
 
 4. **Frontend Setup**:
@@ -63,7 +62,7 @@ A web platform designed to provide users with insights into their Spotify listen
    npm run dev
    ```
    
-6. Open your browser and navigate to **http://localhost:3000** (or whatever port you've set).
+6. Open your browser and navigate to **http://localhost:5173**
 
 ## Contributing
 
