@@ -1,10 +1,9 @@
 const axios = require('axios')
 const crypto = require('crypto')
 const dotenv = require('dotenv')
-const jwt = require('jsonwebtoken')
 dotenv.config()
 
-const REDIRECT_URI = process.env.REDIRECT_URI || 'https://young-meadow-2700.fly.dev/api/auth/callback'
+const REDIRECT_URI = process.env.REDIRECT_URI
 const USER_INFO_URL = 'https://api.spotify.com/v1/me'
 
 const getAuthHeader = (token) => {
@@ -30,19 +29,19 @@ const getUserId = async (accessToken) => {
   }
 }
 
-const getJwt = (userId, accessToken, refreshToken) => {
-  const expirationTime = Math.floor(Date.now() / 1000) + (60 * 60) // 60 minutes from now
+// const getJwt = (userId, accessToken, refreshToken) => {
+//   const expirationTime = Math.floor(Date.now() / 1000) + (60 * 60) // 60 minutes from now
 
-  const jwtPayload = {
-    userId: userId,
-    authorized: true,
-    exp: expirationTime,
-    accessToken: accessToken,
-    refreshToken: refreshToken
-  }
+//   const jwtPayload = {
+//     userId: userId,
+//     authorized: true,
+//     exp: expirationTime,
+//     accessToken: accessToken,
+//     refreshToken: refreshToken
+//   }
 
-  return jwt.sign(jwtPayload, process.env.SECRET_KEY, { algorithm: 'HS256' })
-}
+//   return jwt.sign(jwtPayload, process.env.SECRET_KEY, { algorithm: 'HS256' })
+// }
 
 const genRandomString = (length) => {
   return crypto.randomBytes(length).toString('hex').slice(0, length)
@@ -101,7 +100,6 @@ const filterArtists = (artists) => {
 module.exports = {
     getAuthHeader,
     getUserId,
-    getJwt,
     genRandomString,
     getTokens,
     filterTracks,

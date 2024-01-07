@@ -24,15 +24,24 @@ const App = () => {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [anchorElNav, setAnchorElNav] = useState(null)
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search)
-    const jwt = urlParams.get("jwt")
+  console.log("Authorized: ", isAuthorized)
 
-    if(jwt) {
-      localStorage.setItem('jwt', jwt)
-      setIsAuthorized(true)
+  // Function to check authentication status
+  useEffect(() => {
+
+    const checkAuthentication = async () => {
+      try {
+        const response = await fetch('/api/auth/authorized', { credentials: 'include'})
+        const data = await response.json()
+    
+        setIsAuthorized(data.isAuthorized)
+      }
+      catch (error) {
+        console.error('Error checking authentication status: ', error)
+      }
     }
-        
+
+    checkAuthentication()    
   }, [])
 
   const handleOpenNavMenu = (event) => {

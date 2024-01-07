@@ -1,13 +1,23 @@
 const authRouter = require('express').Router()
+const e = require('express')
 const utils = require('../utils/utils')
 
-const REDIRECT_URI = process.env.REDIRECT_URI || 'https://young-meadow-2700.fly.dev/api/auth/callback'
+const REDIRECT_URI = process.env.REDIRECT_URI
 const SCOPE = 'user-library-read user-read-recently-played user-top-read user-follow-read user-read-email user-read-private'
 
-authRouter.get('/login', async (req, res) => {
+authRouter.get('/authorized', (req, res) => {
+  if (req.session && req.session.accessToken) {
+    res.json({ isAuthorized: true })
+  }
+  else {
+    res.json({ isAuthorized: false })
+  }
+})
+
+authRouter.get('/login', (req, res) => {
   const responseType = 'code'
   const state = utils.genRandomString(16)
-  req.session.state = state
+  req.session.authState = state
 
   const spotifyAuthUrl = 'https://accounts.spotify.com/authorize?'
     + `response_type=${responseType}&`
@@ -16,43 +26,36 @@ authRouter.get('/login', async (req, res) => {
     + `redirect_uri=${REDIRECT_URI}&`
     + `state=${state}`
 
-
+  console.log("Redirecting to spotify for authentication")
   res.redirect(spotifyAuthUrl)
 })
 
 authRouter.get('/callback', async (req, res) => {
   const code = req.query.code
   const state = req.query.state
-  const storedState = req.session.state
 
-  if(!state || state !== storedState) {
-    return res.status(401).json({ error: 'Unauthorized', message: 'State mismatch or missing state'})
+  if(state === req.session.authState) {
+    delete req.session.authState
   }
   else {
-    delete req.session.state
+    return res.status(500).json({"error": "Server Error", "message": "State mismatch or missing state"})
   }
 
 
   try {
+    console.log("Getting tokens")
     const { accessToken, refreshToken} = await utils.getTokens(code)
 
     if(!accessToken || !refreshToken) {
       throw new Error('Invalid token')
     }
 
-    const userId = await utils.getUserId(accessToken)
+    console.log("Access Token: ", accessToken)
 
-    if(userId !== null) {
-      const jwtToken = utils.getJwt(userId, accessToken, refreshToken)
-      
-      const redirectUrl = process.env.REDIRECT_URL || `https://young-meadow-2700.fly.dev/analytics/top-tracks`
-      const jwtRedirectUrl = redirectUrl + `?jwt=${jwtToken}`
-      
-      res.redirect(jwtRedirectUrl)
-    }
-    else {
-      res.status(401).json({ error: 'Unauthorized', message: 'Failed to generate JWT'})
-    }
+    req.session.accessToken = accessToken
+    req.session.refreshToken = refreshToken
+
+    res.redirect("http://localhost:5173/analytics/top-tracks")
   }
   catch (error) {
     res.status(500).json({ error: 'Unauthorized', message: 'An error occurred during token retrieval' })
