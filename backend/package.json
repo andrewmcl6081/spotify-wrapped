@@ -5,10 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "build:ui": "rm -rf dist && cd ../frontend/ && npm run build && cp -r dist ../backend",
-    "deploy": "fly deploy",
-    "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "dev": "nodemon index.js",
+    "build": "rm -rf dist && cd ../frontend/ && npm run build && cp -r dist ../backend"
   },
   "keywords": [],
   "author": "",
@@ -18,10 +16,9 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "jsonwebtoken": "^9.0.2"
+    "express-session": "^1.17.3"
   },
   "devDependencies": {
-    "@flydotio/dockerfile": "^0.4.10"
+    "nodemon": "^3.0.2"
   }
 }
